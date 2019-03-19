@@ -7,5 +7,5 @@
 *.exe
 *.o
 *.so
-bin\*
+bin\\*
 

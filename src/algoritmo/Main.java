@@ -1,8 +1,13 @@
 package algoritmo;
 
+import javax.swing.JPanel;
+
 import org.math.plot.*;
 
 import cromosoma.Cromosoma;
+import cruce.Ciclos;
+import vista.Vista;
+
 
 public class Main {
 	
@@ -10,19 +15,45 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Cromosoma individuo = new Cromosoma();
+		Cromosoma[] poblacion = new Cromosoma[2];
 		
-		individuo.generarCromosomaRandom();
-		
-		for(int i = 0; i < individuo.getLongitud(); i++) {
-			System.out.print(" " + individuo.getGenes()[i] + " ");
+		for(int i =0 ; i < 2; i++) {
+			poblacion[i] = new Cromosoma();
+			poblacion[i].generarCromosomaRandom();
+			poblacion[i].print();
 		}
 		
+		Ciclos ci = new Ciclos();
+		
+		ci.cruzarGenes(poblacion[0], poblacion[1]);
+		
+		poblacion[0].print();
+		poblacion[1].print();
 		
 		
-		
-		// TODO Auto-generated method stub
+		/*
+		 Vista vista = new Vista();
+	        
 
+	        JPanel grafica = vista.getGraficaPanel();
+
+	        // create your PlotPanel (you can use it as a JPanel)
+	        plot = new Plot2DPanel();
+
+	        
+	        plot.setSize(grafica.getWidth(),grafica.getHeight());
+	        
+	        // define the legend position
+	        plot.addLegend("SOUTH");
+	        
+	        grafica.add(plot);
+	            
+	        vista.setVisible(true);
+		
+		// TODO Auto-generated method stub 
+		 * */
 	}
+	
+	
 
 }

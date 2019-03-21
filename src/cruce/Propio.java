@@ -1,5 +1,13 @@
 package cruce;
 
-public class Propio {
+import cromosoma.Cromosoma;
+
+public class Propio extends CruceAbstracto  {
+
+	@Override
+	void cruzarGenes(Cromosoma padre, Cromosoma madre) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

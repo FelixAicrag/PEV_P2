@@ -20,7 +20,7 @@ public class Distancias {
 
             {488,  659,   800,   243,   536,   583,   158},
 
-            {504,  675,   651,   229,   89,          918,   605,   447},
+            {504,  675,   651,   229,   89,    918,   605,   447},
 
             {617,  688,   484,   618,   342,   1284,  1058,  900,   369},
 
@@ -71,7 +71,7 @@ public class Distancias {
 	public int getDistancia(int A, int B){
 		int distancia;
 		if(A==B) distancia = 0;
-		else if(A>B) distancia = _DIST[B][A];
+		else if(A<B) { distancia = _DIST[B][A]; }
 		else distancia = _DIST[A][B];
 		return distancia;
 		

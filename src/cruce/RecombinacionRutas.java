@@ -1,5 +1,13 @@
 package cruce;
 
-public class RecombinacionRutas {
+import cromosoma.Cromosoma;
+
+public class RecombinacionRutas extends CruceAbstracto  {
+
+	@Override
+	void cruzarGenes(Cromosoma padre, Cromosoma madre) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

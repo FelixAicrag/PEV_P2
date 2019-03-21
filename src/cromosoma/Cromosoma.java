@@ -18,17 +18,18 @@ public class Cromosoma{
 	
 	public Cromosoma() {
 		this.genes = new int[27];
-		this.fitness = 0.0;
+		this.fitness = 0;
 		this.puntuacion = 0.0;
 		this.puntuacion_acu = 0.0;
 		this.longitudCromosoma = 27;
 	}
 	
-	public Cromosoma(int[] genes, int longitud) {
-		this.genes = genes;
-		this.fitness = 0.0;
-		this.puntuacion = 0.0;
-		this.puntuacion_acu = 0.0;
+	public Cromosoma(int[] genes, double fitness, double puntuacion, 
+			double puntuacion_acu,int longitud) {
+		setGenes(genes);
+		this.fitness = fitness;
+		this.puntuacion = puntuacion;
+		this.puntuacion_acu = puntuacion_acu;
 		this.longitudCromosoma = longitud;
 	}
 	
@@ -41,7 +42,8 @@ public class Cromosoma{
 	}
 	
 	public void setGenes(int[] genes) {
-    	for(int i = 0; i < this.genes.length; i++) {
+		this.genes = new int[genes.length];
+    	for(int i = 0; i < genes.length; i++) {
     		this.genes[i] = genes[i];
     	}
 	}
@@ -78,6 +80,15 @@ public class Cromosoma{
 		this.longitudCromosoma = longitud;
 	}
 	
+	public Cromosoma copiarCromosoma() {
+		Cromosoma nuevo = new Cromosoma(this.getGenes(),
+				  						this.getFitness(),
+				  						this.getPuntuacion(),
+				  						this.getPuntuacionAcu(),
+				  						this.getLongitud());
+		return nuevo;
+	}
+	
 	public void generarCromosomaRandom() {
 		int[] genoma = new int[this.longitudCromosoma];
 		for(int i = 0; i < Ciudades.MADRID.ordinal(); i++) {
@@ -107,5 +118,16 @@ public class Cromosoma{
 	      ar[i] = a;
 	    }
 	  }
+	  
+		//Metodos de testeo:
+		
+		public void print() {
+			System.out.print("[");
+			for(int i = 0; i < this.genes.length; i++) {
+				System.out.print(" " + this.genes[i] + " ");
+			}
+			System.out.print("] ");
+			System.out.print("Fitness: " + this.fitness + "\n");
+		}
 	
 }

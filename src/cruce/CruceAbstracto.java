@@ -4,22 +4,16 @@ import cromosoma.Cromosoma;
 
 public abstract class CruceAbstracto {
 	double probCruce;
-	int tamPoblacion;
 	Cromosoma[] poblacion;
 	
 	public CruceAbstracto() {}
 	
-	public CruceAbstracto(double probCruce, int tamPoblacion, Cromosoma[] pob) {
-		this.probCruce = probCruce;
-		this.tamPoblacion = tamPoblacion;
-		this.poblacion = pob;
-	}
-	
 	public void cruzar() {
-		boolean[] progenitores = new boolean[this.tamPoblacion];
-		Cromosoma soltero = null;
+		boolean[] progenitores = new boolean[this.poblacion.length];
+		int posAnterior = -1;
+		boolean soltero = false;
 		//seleccionamos las cromosomas a cruzar
-		for(int i = 0; i < this.tamPoblacion; i++) {
+		for(int i = 0; i < this.poblacion.length; i++) {
 			double aleatorio = Math.random();
 			if(aleatorio < this.probCruce) { progenitores[i] = true;}
 			else progenitores[i] = false;
@@ -27,16 +21,24 @@ public abstract class CruceAbstracto {
 		
 		
 		//de los seleccionados, va haciendo parejas y las cruza.
-		for(int i = 0; i < this.tamPoblacion; i++) {
+		for(int i = 0; i < this.poblacion.length; i++) {
 			if(progenitores[i]) {
-				if(soltero != null) {
-					cruzarGenes(soltero, this.poblacion[i]);
-					soltero = null;
+				
+				if(soltero) {
+					cruzarGenes(poblacion[posAnterior], poblacion[i]);
+					soltero = false;
 				}
-				else soltero =  this.poblacion[i];
+				else {
+					soltero = true; 
+					posAnterior = i;
+				}
 			}
 		}		
 	}
 	
 	abstract void cruzarGenes(Cromosoma padre, Cromosoma madre);
+	
+	public Cromosoma[] getPoblacion() {
+		return this.poblacion;
+	}
 }

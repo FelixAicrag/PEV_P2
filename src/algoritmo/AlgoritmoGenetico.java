@@ -3,7 +3,10 @@ package algoritmo;
 import java.util.ArrayList;
 
 import cromosoma.Cromosoma;
+import cruce.Ciclos;
+import seleccion.Restos;
 import seleccion.Ruleta;
+import seleccion.Torneos;
 import utils.*;
 
 public class AlgoritmoGenetico {
@@ -42,6 +45,33 @@ public class AlgoritmoGenetico {
 		this.elitismo = elitismo;
 		
 		this.poblacion = new Cromosoma[tamPoblacion];
+		this.elite = new ArrayList<Cromosoma>();
+		
+		this.mediasGeneracion = new double[numGeneraciones];
+		this.mejoresGeneracion = new double[numGeneraciones];
+		this.mejoresAbsolutos = new double[numGeneraciones];
+	}
+	
+	public AlgoritmoGenetico(TipoSeleccion tipo_seleccion, TipoCruce tipo_cruce, TipoMutacion tipo_mutacion,
+			 int numGeneraciones, double probabilidadCruce, double probabilidadMutacion,
+			double probabilidadUniforme, double elitismo, Cromosoma[] pob) {
+		
+		this.generacionActual = 0;
+		this.tipo_seleccion = tipo_seleccion;
+		this.tipo_cruce = tipo_cruce;
+		this.tamPoblacion = pob.length;
+		
+		this.numGeneraciones = numGeneraciones;
+		this.probabilidadCruce = probabilidadCruce;
+		this.probabilidadMutacion = probabilidadMutacion;
+		this.probabilidadUniforme = probabilidadUniforme;
+		this.elitismo = elitismo;
+		
+		this.poblacion = new Cromosoma[this.tamPoblacion];
+		for(int i = 0; i < this.tamPoblacion; i++) {
+			this.poblacion[i] = pob[i].copiarCromosoma();
+		}
+		
 		this.elite = new ArrayList<Cromosoma>();
 		
 		this.mediasGeneracion = new double[numGeneraciones];
@@ -95,7 +125,7 @@ public class AlgoritmoGenetico {
 		return valor;
 	}
 
-	private void inicializaPoblacion() {
+	void inicializaPoblacion() {
 		for(int i = 0; i < tamPoblacion; i++) {
 			this.poblacion[i] = new Cromosoma();
 			this.poblacion[i].generarCromosomaRandom();
@@ -106,7 +136,7 @@ public class AlgoritmoGenetico {
         this.generacionActual = 0;
 	}
 
-	private void evaluaPoblacion() {
+	void evaluaPoblacion() {
 		double fitness, fitness_best, sum_fitness = 0;
 		int pos_fitness_best = 0;
 		fitness_best = fitness(this.poblacion[0]);
@@ -140,21 +170,42 @@ public class AlgoritmoGenetico {
 		this.mejoresAbsolutos[this.generacionActual] = this.elMejor.getFitness();
 	}
 
-	private void seleccionaElite() {
-		// TODO Auto-generated method stub
+	void seleccionaElite() {
+		int numSeleccionados = (int) (this.elitismo*this.tamPoblacion);
+		elite.clear();
 		
+		ordenarPoblacion();
+		for(int i = 0; i < numSeleccionados; i++) {
+			elite.add(this.poblacion[i].copiarCromosoma());
+		}
+	}
+	
+	void incluyeElite() {
+		int numSeleccionados = (int) (this.elitismo*this.tamPoblacion);
+		ordenarPoblacion();
+		for(int i = 0; i < numSeleccionados; i++) {
+			this.poblacion[(this.tamPoblacion -i) -1] = elite.get(i);
+		}
 	}
 
-	private void seleccionaPoblacion() {
+	void seleccionaPoblacion() {
 		
 		switch(tipo_seleccion) {
 		case RULETA: 
-			Ruleta ruleta = new Ruleta();
-			this.poblacion = ruleta.seleccionRuleta(this.poblacion);
+			Ruleta ruleta = new Ruleta(this.poblacion);
+			ruleta.seleccion();
+			break;
+		case RESTOS:
+			Restos restos = new Restos(this.poblacion, 0.2, this.tamPoblacion/2);
+			restos.seleccion();
+			break;
+		case TORNEOS:
+			Torneos torneos = new Torneos(this.poblacion, 3);
+			torneos.seleccion();
 			break;
 		default:
-			Ruleta predet = new Ruleta();
-			this.poblacion = predet.seleccionRuleta(this.poblacion);
+			Ruleta predet = new Ruleta(this.poblacion);
+			predet.seleccion();
 			break;
 		}
 		
@@ -162,24 +213,60 @@ public class AlgoritmoGenetico {
 		
 	}
 
-	private void reproducePoblacion() {
+	void reproducePoblacion() {
 		switch(tipo_cruce) {
 		case CICLOS: 
-			//EstocasticoUniversal estocastUniv = new EstocasticoUniversal(this.poblacion, this.tamPoblacion);
-			//estocastUniv.seleccionEstocastico(this.funcion, this.precision, this.numGenes);
+			Ciclos ciclos = new Ciclos(this.probabilidadCruce, this.poblacion);
+			ciclos.cruzar();
 			break;
 		default:
+			Ciclos predet = new Ciclos(this.probabilidadCruce, this.poblacion);
+			predet.cruzar();
 			break;
 		}
 		
 		
 		
 	}
-
-	public void incluyeElite() {
-		// TODO Auto-generated method stub
-		
+	
+	/**
+     * Ordena de menor a mayor fitness
+     */
+	private void ordenarPoblacion() {
+		ordenarPoblacionAux(0, this.poblacion.length-1);
 	}
+	
+
+    private void ordenarPoblacionAux(int izq, int der) {
+    	 
+        int i = izq;
+        int j = der;
+        
+        Cromosoma pivote = this.poblacion[(i+j)/2];
+        
+        do {
+            while (this.poblacion[i].getFitness() < pivote.getFitness()){
+                i++;
+            }
+            while (this.poblacion[j].getFitness() > pivote.getFitness()){
+                j--;
+            }
+            if (i<=j){
+                Cromosoma aux = this.poblacion[i].copiarCromosoma();
+                this.poblacion[i] = this.poblacion[j].copiarCromosoma();
+                this.poblacion[j] = aux.copiarCromosoma();
+                i++;
+                j--;
+            }
+        }while(i<=j);
+        if (izq<j){
+            ordenarPoblacionAux(izq, j);
+        }
+        if (i<der){
+            ordenarPoblacionAux(i, der);
+        }
+    }
+
 
 	public void aumentaGeneracion() {
 		this.generacionActual++;

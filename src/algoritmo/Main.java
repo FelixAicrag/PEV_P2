@@ -3,6 +3,7 @@ package algoritmo;
 import javax.swing.JPanel;
 
 import org.math.plot.*;
+import utils.*;
 
 import cromosoma.Cromosoma;
 import cruce.Ciclos;
@@ -14,24 +15,7 @@ public class Main {
 	public static Plot2DPanel plot;
 
 	public static void main(String[] args) {
-		
-		Cromosoma[] poblacion = new Cromosoma[2];
-		
-		for(int i =0 ; i < 2; i++) {
-			poblacion[i] = new Cromosoma();
-			poblacion[i].generarCromosomaRandom();
-			poblacion[i].print();
-		}
-		
-		Ciclos ci = new Ciclos();
-		
-		ci.cruzarGenes(poblacion[0], poblacion[1]);
-		
-		poblacion[0].print();
-		poblacion[1].print();
-		
-		
-		/*
+
 		 Vista vista = new Vista();
 	        
 
@@ -49,9 +33,39 @@ public class Main {
 	        grafica.add(plot);
 	            
 	        vista.setVisible(true);
+	        
 		
-		// TODO Auto-generated method stub 
-		 * */
+			/*
+			
+			AlgoritmoGenetico ag = new AlgoritmoGenetico(TipoSeleccion.RESTOS, TipoCruce.CICLOS, TipoMutacion.HEURISTICA, 20, 1, 0.0, 0.0, 0.0, 0.0);
+			
+			ag.inicializaPoblacion();
+			ag.evaluaPoblacion();
+			
+			for(int i =0 ; i < ag.poblacion.length; i++) {
+				ag.poblacion[i].print();
+			}
+			
+			System.out.println("NUEVOS:");
+			
+			for (int i = 0; i < ag.numGeneraciones; i++) {
+				ag.seleccionaElite();
+				
+				ag.seleccionaPoblacion();
+				ag.reproducePoblacion();
+				
+				ag.incluyeElite();
+	                     
+				ag.evaluaPoblacion();
+				ag.aumentaGeneracion();
+			}
+			
+			
+			
+			for(int i =0 ; i < ag.poblacion.length; i++) {
+				ag.poblacion[i].print();
+			}
+			*/
 	}
 	
 	

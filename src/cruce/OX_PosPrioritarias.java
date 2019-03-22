@@ -5,7 +5,7 @@ import cromosoma.Cromosoma;
 public class OX_PosPrioritarias extends CruceAbstracto  {
 
 	@Override
-	void cruzarGenes(Cromosoma padre, Cromosoma madre) {
+	public void cruzarGenes(Cromosoma padre, Cromosoma madre) {
 		// TODO Auto-generated method stub
 		
 	}

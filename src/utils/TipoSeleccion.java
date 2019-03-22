@@ -1,6 +1,7 @@
 package utils;
 
 public enum TipoSeleccion {
-	RULETA
+	RULETA, RESTOS, TORNEOS
 	// TODO hacer el resto!
+
 }

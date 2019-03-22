@@ -2,42 +2,42 @@ package seleccion;
 
 import cromosoma.Cromosoma;
 
-public class Ruleta {
+public class Ruleta extends SeleccionAbstracta {
 	
 	int posSuperviviente;
 	
 	
-	public Ruleta () {
+	public Ruleta (Cromosoma[] pob) {
+		this.poblacion = pob;
 	}
 	
-
-	public Cromosoma[] seleccionRuleta(Cromosoma[] pob) {
+	@Override
+	public void seleccion() {
 		
 		
 		
 		double prob = 0;
-		int[] supervivientes = new int[pob.length];
-		Cromosoma[] pob_nueva = new Cromosoma[pob.length];
+		int[] supervivientes = new int[this.poblacion.length];
+		Cromosoma[] pob_nueva = new Cromosoma[this.poblacion.length];
 		
-		for(int i = 0; i < pob.length; i++) {
+		for(int i = 0; i < this.poblacion.length; i++) {
 			prob = Math.random();
 			this.posSuperviviente = 0;
 			
-			while((posSuperviviente < pob.length -1)
-					&& (prob > pob[posSuperviviente].getPuntuacionAcu())) {
+			while((posSuperviviente < this.poblacion.length -1)
+					&& (prob > this.poblacion[posSuperviviente].getPuntuacionAcu())) {
 				posSuperviviente++;
 			}
 			
 			supervivientes[i] = posSuperviviente;
 		}
 		
-		for(int j = 0; j < pob.length; j++) {
-			pob_nueva[j] = pob[supervivientes[j]].copiarCromosoma();	
+		for(int j = 0; j < this.poblacion.length; j++) {
+			pob_nueva[j] = this.poblacion[supervivientes[j]].copiarCromosoma();	
 		}
 		
-		return pob_nueva;
-		
-		
+		for(int i = 0; i < poblacion.length; i++) {
+			this.poblacion[i] = pob_nueva[i].copiarCromosoma();
+		}
 	}
-	// TODO hacer!
 }

@@ -3,6 +3,11 @@ package cruce;
 import cromosoma.Cromosoma;
 
 public class Ciclos extends CruceAbstracto {
+	
+	public Ciclos(double probCruce, Cromosoma[] pob) {
+		this.probCruce = probCruce;
+		this.poblacion = pob;
+	}
 		
 	/**
 	 * 
@@ -42,8 +47,8 @@ public class Ciclos extends CruceAbstracto {
 		}
 		
 		for(int i = 0; i < genesA.length; i++) {
-			if(genesA[i] == -1) { genesA[i] = genesPadre[i]; };
-			if(genesB[i] == -1) { genesB[i] = genesMadre[i]; };
+			if(genesA[i] == -1) { genesA[i] = genesMadre[i]; };
+			if(genesB[i] == -1) { genesB[i] = genesPadre[i]; };
 		}
 		
 		padre.setGenes(genesA);
